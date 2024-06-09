@@ -1,19 +1,29 @@
 import "./StudentAnswersScreen.css";
 
+import {SetStateAction, useEffect, useState} from "react";
+import {getAnswers} from "../services/FormService";
 
 
 function StudentAnswersScreen (props: {name: string}) {
     const { name } = props;
-    const answers = [
-        {
-            question: "Jego ulubiony kolor?",
-            answers: ["Czerwony", "Niebieski", "Zielony", "Żółty"]
-        },
-        {
-            question: "Czy lubi pizzę?",
-            answers: ["TakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaakaTakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaakaTakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaakaTakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaka", "Tak", "Tak", "Nie"]
-        }
-    ]
+    // const answers = [
+    //     {
+    //         question: "Jego ulubiony kolor?",
+    //         answers: ["Czerwony", "Niebieski", "Zielony", "Żółty"]
+    //     },
+    //     {
+    //         question: "Czy lubi pizzę?",
+    //         answers: ["TakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaakaTakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaakaTakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaakaTakaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaka", "Tak", "Tak", "Nie"]
+    //     }
+    // ]
+
+    const [answers, setAnswers] = useState([]);
+    useEffect(() => {
+        getAnswers(name).then((response: { data: SetStateAction<never[]>; }) => {
+            setAnswers(response.data);
+        });
+    }, [name]);
+    console.log(answers);
 
     return (
         <div className="student-container">

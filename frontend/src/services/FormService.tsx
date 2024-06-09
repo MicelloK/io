@@ -15,3 +15,13 @@ export const createForm = (form: any) => {
     };
     return axios.post(environment.backEnd + "/form", data, axiosConfig);
 }
+
+export const getAnswers = (name: string) => {
+    const axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getToken()
+        }
+    };
+    return axios.get(environment.backEnd + "/answers" + name, axiosConfig);
+}

@@ -2,9 +2,17 @@ import "./AllStudentsAnswersScreen.css";
 import "./StudentAnswersScreen.css";
 
 import StudentAnswersScreen from "./StudentAnswersScreen";
+import {useEffect, useState} from "react";
+import {getStudents} from "../services/VirtualClassService";
 
 function AllStudentsAnswersScreen() {
-    const students = ["Krzysztof Kowalski", "Jan NieKowalski", "Jadwiga Nowak"];
+    const [students, setStudents] = useState([]);
+    
+    useEffect(() => {
+        getStudents().then((response) => {
+            setStudents(response.data);
+        });
+    }, []);
 
     return (
         <div className="all-students-container">
