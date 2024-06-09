@@ -31,6 +31,10 @@ function WaitingRoomScreen() {
         });
     });
 
+    function handleGameStart() {
+        // TODO: implement game start
+    }
+
     return(
         <div className="wrapper">
             <div className="header">
@@ -55,6 +59,9 @@ function WaitingRoomScreen() {
                         ))}
                     </div>
                 )}
+            </div>
+            <div className="start-game-container">
+                <button className="start-game-button" onClick={handleGameStart}>Rozpocznij grę</button>
             </div>
         </div>
     )
