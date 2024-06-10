@@ -1,12 +1,12 @@
 import "./WaitingRoomScreen.css";
 
 import StudentComponent from "./studentComponent";
-import {getAccessCode, getClassName, getStudents} from "../services/VirtualClassService";
+import { getAccessCode, getClassName, getStudents } from "../services/VirtualClassService";
 // import { environment } from "../environments/environment";
 
 import QRCode from "react-qr-code";
-import {useEffect, useState} from "react";
-import {environment} from "../environments/environment.tsx";
+import { useEffect, useState } from "react";
+import { environment } from "../environments/environment.tsx";
 
 function WaitingRoomScreen() {
 
@@ -40,7 +40,7 @@ function WaitingRoomScreen() {
             <div className="header">
                 <div className="qr-container">
                     <QRCode size={256} style={{ height: "22vh", maxWidth: "100%", width: "auto" }}
-            value={gameAddress + "?code=" + gameCode}/>
+                        value={gameAddress + "?code=" + gameCode} />
                 </div>
                 <div className="game-address">
                     <p>Kod dostępu: <strong>{gameCode}</strong></p>
