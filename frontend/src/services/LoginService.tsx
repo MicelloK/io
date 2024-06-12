@@ -17,11 +17,11 @@ export const joinClass = (code: string, name: string) => {
     return axios.post(environment.backEnd + "/class/join", data, axiosConfig);
 }
 
-export const removeStudent = () => {
+export const removeStudent = (name: string) => {
     const headers = {
         'Content-Type': 'application/json',
         "Authorization": "Bearer " + getToken()
     };
-    return axios.delete(environment.backEnd = "/class/remove", {headers: headers})
+    return axios.delete(environment.backEnd + "/class/remove/" + name, {headers: headers})
 };
 

@@ -14,7 +14,6 @@ import pl.edu.agh.backend.utils.jwt.JwtUtils;
 
 import java.util.List;
 
-
 @RestController
 @CrossOrigin
 @RequestMapping(path = API_PATH.root + API_PATH.virtualClass)
@@ -28,7 +27,8 @@ public class VirtualClassController {
     }
 
     @PostMapping(path = "")
-    public ResponseEntity<String> createVirtualClass(@Valid @RequestBody RequestDTO request) throws VirtualClassAlreadyCreatedException {
+    public ResponseEntity<String> createVirtualClass(@Valid @RequestBody RequestDTO request)
+            throws VirtualClassAlreadyCreatedException {
         String name = request.getName();
         virtualClassService.createVirtualClass(name);
         String access = jwtUtils.createToken(virtualClassService.getSecurityCode());
@@ -38,7 +38,8 @@ public class VirtualClassController {
     }
 
     @DeleteMapping(path = "")
-    public ResponseEntity<Void> deleteVirtualClass(@RequestHeader HttpHeaders headers) throws VirtualClassNotFoundException {
+    public ResponseEntity<Void> deleteVirtualClass(@RequestHeader HttpHeaders headers)
+            throws VirtualClassNotFoundException {
         try {
             String jwtToken = jwtUtils.getToken(headers);
             String name = jwtUtils.extractName(jwtToken);
@@ -78,16 +79,19 @@ public class VirtualClassController {
         return ResponseEntity.ok(json.toString());
     }
 
-    @DeleteMapping(path = "/remove")
-    public ResponseEntity<Void> removeStudent(@RequestHeader HttpHeaders headers, @Valid @RequestBody RequestDTO request)
+    @DeleteMapping(path = "/remove/{name}")
+    public ResponseEntity<Void> removeStudent(@PathVariable(value = "name") String name,
+            @RequestHeader HttpHeaders headers)
             throws VirtualClassNotFoundException, StudentNotFoundException {
+
         try {
             String jwtToken = jwtUtils.getToken(headers);
             String authName = jwtUtils.extractName(jwtToken);
-            if (jwtUtils.isExpired(jwtToken) || !authName.equals(request.getName())) {
+            System.out.println(authName);
+            if (jwtUtils.isExpired(jwtToken) || virtualClassService.notTeacher(authName)) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
-            virtualClassService.removeStudent(request.getName());
+            virtualClassService.removeStudent(name);
             return ResponseEntity.noContent().build();
         } catch (RequestWithoutAuthorizationException e) {
             return ResponseEntity.badRequest().build();
@@ -95,7 +99,8 @@ public class VirtualClassController {
     }
 
     @GetMapping(path = "/students")
-    public ResponseEntity<List<String>> getStudents(@RequestHeader HttpHeaders headers) throws VirtualClassNotFoundException {
+    public ResponseEntity<List<String>> getStudents(@RequestHeader HttpHeaders headers)
+            throws VirtualClassNotFoundException {
         try {
             String jwtToken = jwtUtils.getToken(headers);
             String authName = jwtUtils.extractName(jwtToken);
