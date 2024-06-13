@@ -9,17 +9,11 @@
   },
   "multipleSelectionQuestions": {
     "label": "Pytanie wielokrotnego wyboru",
-    "questions": [{
-        "question": "",
-        "options": [""]
-      }]
+    "questions": []
   },
   "singleSelectionQuestions": {
     "label": "Pytanie jednokrotnego wyboru",
-    "questions": [{
-        "question": "",
-        "options": [""]
-      }]
+    "questions": []
   },
   "checkboxQuestions": {
     "label": "Pytania tak/nie",
