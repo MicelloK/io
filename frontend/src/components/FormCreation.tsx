@@ -8,7 +8,7 @@ import {
     reset,
     getValues
 } from '@modular-forms/react';
-import { createForm, handleFormImport } from "../services/FormService.ts";
+import { createForm } from "../services/FormService.ts";
 import { FormHeader, FormFooter, TextInput, ColorButton, InputLabel, TextAreaInput } from './formComponents';
 import { useNavigate } from 'react-router-dom';
 
@@ -60,18 +60,12 @@ const initialValues = {
 
     multipleSelectionQuestions: {
         label: 'Pytanie wielokrotnego wyboru',
-        questions: [{
-            question: '',
-            options: ['']
-        }]
+        questions: []
     },
 
     singleSelectionQuestions: {
         label: 'Pytanie jednokrotnego wyboru',
-        questions: [{
-            question: '',
-            options: ['']
-        }]
+        questions: []
     },
 
     checkboxQuestions: {
