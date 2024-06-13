@@ -5,12 +5,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pl.edu.agh.backend.exceptions.types.RequestWithoutAuthorizationException;
+import pl.edu.agh.backend.models.Answer;
 import pl.edu.agh.backend.services.VirtualClassService;
 import pl.edu.agh.backend.utils.API_PATH;
 import pl.edu.agh.backend.utils.jwt.JwtUtils;
 
+import java.util.List;
+import java.util.Map;
+
 @RestController
-@CrossOrigin
 @RequestMapping(path = API_PATH.root + API_PATH.form)
 public class FormsController {
     private final VirtualClassService virtualClassService;
@@ -43,7 +46,7 @@ public class FormsController {
         try {
             String jwtToken = jwtUtils.getToken(headers);
             String authName = jwtUtils.extractName(jwtToken);
-            if (jwtUtils.isExpired(jwtToken) || virtualClassService.notStudent(authName)) {
+            if (jwtUtils.isExpired(jwtToken)) {
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
             }
             if (virtualClassService.addAnswer(name, authName, json)) {
@@ -56,4 +59,62 @@ public class FormsController {
         }
     }
 
+    @GetMapping(path = "/answer/get/{name}")
+    public ResponseEntity<List<Answer>> getAnonymousAnswers(@PathVariable String name, @RequestHeader HttpHeaders headers) {
+        try {
+            String jwtToken = jwtUtils.getToken(headers);
+            if (jwtUtils.isExpired(jwtToken)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            return ResponseEntity.ok(virtualClassService.getAnonymousAnswers(name));
+
+        } catch (RequestWithoutAuthorizationException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "/answer/admin/get/{name}")
+    public ResponseEntity<Map<String, List<Answer>>> getAnswers(@PathVariable String name, @RequestHeader HttpHeaders headers) {
+        try {
+            String jwtToken = jwtUtils.getToken(headers);
+            String authName = jwtUtils.extractName(jwtToken);
+            if (jwtUtils.isExpired(jwtToken) || virtualClassService.notTeacher(authName)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            return ResponseEntity.ok(virtualClassService.getAnswers(name));
+
+        } catch (RequestWithoutAuthorizationException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "/answer/admin/get")
+    public ResponseEntity<Map<String, Map<String, List<Answer>>>> getAllAnswers(@RequestHeader HttpHeaders headers) {
+        try {
+            String jwtToken = jwtUtils.getToken(headers);
+            String authName = jwtUtils.extractName(jwtToken);
+            if (jwtUtils.isExpired(jwtToken) || virtualClassService.notTeacher(authName)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            return ResponseEntity.ok(virtualClassService.getAllAnswers());
+
+        } catch (RequestWithoutAuthorizationException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
+    @GetMapping(path = "/answer/get")
+    public ResponseEntity<Map<String, List<Answer>>> getAllAnonymousAnswers(@RequestHeader HttpHeaders headers) {
+        try {
+            String jwtToken = jwtUtils.getToken(headers);
+            String authName = jwtUtils.extractName(jwtToken);
+            if (jwtUtils.isExpired(jwtToken) || virtualClassService.notTeacher(authName)) {
+                return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            }
+            return ResponseEntity.ok(virtualClassService.getAllAnonymousAnswers());
+
+        } catch (RequestWithoutAuthorizationException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }
