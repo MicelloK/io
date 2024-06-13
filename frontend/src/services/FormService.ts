@@ -41,3 +41,13 @@ export const sendAnswer = (name: string, data) => {
     };
     return axios.post(environment.backEnd + "/form/answer/" + name, data, axiosConfig);
 }
+
+export const getAnswers = (name: string) => {
+    const axiosConfig = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getToken()
+        }
+    };
+    return axios.get(environment.backEnd + "/form/answer/get/" + name, axiosConfig);
+}
